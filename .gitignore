@@ -140,7 +140,7 @@ dmypy.json
 cython_debug/
 
 ## The database itself
-.sqlite
+*.sqlite
 
 ## Pycharm
 .idea/
