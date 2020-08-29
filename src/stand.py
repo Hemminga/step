@@ -1,5 +1,5 @@
 import sqlite3
-from pprint import pprint
+# from pprint import pprint
 
 conn = sqlite3.connect('step.sqlite')
 sql = """
@@ -14,6 +14,9 @@ sql = """
 c.execute(sql)
 data_rows = c.fetchall()
 conn.close()
+
+# Will be True if there are more than 4 sessions
+ext = False
 
 # List met alle data op volgorde (aflopend)
 data = [data_rows[x][0] for x in range(len(data_rows))]
@@ -44,6 +47,7 @@ for row in uitslagen:
     count = len(row['scores'])
     if count > 4:
         count = 4
+        ext = True
     uitslagen[uitslagen.index(row)]['best'] = sum(best[:count])
     if len(data) > 4:
         count = len(row['scores'][4:]) - row['scores'][4:].count(None)
@@ -72,6 +76,9 @@ for u in uitslagen:
         val = f"{s:.2f}"
         val = val.replace('.', ',')
         table += f"<td>{val}</td>"
+    if ext:
+        # If there are more than 4 sessions add the remainder as summary
+        table += f"<td>{u['old_count']}</td><td>{u['old_average']}</td>"
     table += "\n\t\t</tr>"
     prev_avg = u['average']
 table += "\n\t</tbody>\n</table>"
