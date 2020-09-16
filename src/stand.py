@@ -39,19 +39,20 @@ for row in rows:
 
 for row in uitslagen:
     count = len(row['scores']) - row['scores'].count(None)
-    average = sum(row['scores']) / count
+    # print(row['scores'])
+    average = sum(filter(None, row['scores'])) / count
     uitslagen[uitslagen.index(row)]['average'] = average
     uitslagen[uitslagen.index(row)]['count'] = count
-    best = row['scores'][:]
+    best = list(filter(None, row['scores'][:]))
     best.sort(reverse=True)
     count = len(row['scores'])
     if count > 4:
         count = 4
         ext = True
-    uitslagen[uitslagen.index(row)]['best'] = sum(best[:count])
+    uitslagen[uitslagen.index(row)]['best'] = sum(filter(None, best[:count]))
     if len(data) > 4:
         count = len(row['scores'][4:]) - row['scores'][4:].count(None)
-        average = sum(row['scores'][4:]) / count
+        average = sum(filter(None, row['scores'][4:])) / count
         uitslagen[uitslagen.index(row)]['old_average'] = average
         uitslagen[uitslagen.index(row)]['old_count'] = count
 
@@ -73,8 +74,11 @@ for u in uitslagen:
         prank = rank
     table += f"\n\t\t<tr>\n\t\t\t<td>{prank}</td><td>{u['naam']}</td><td>{avg}</td><td>{u['count']}</td>"
     for s in u['scores'][:4]:
-        val = f"{s:.2f}"
-        val = val.replace('.', ',')
+        if s:
+            val = f"{s:.2f}"
+            val = val.replace('.', ',')
+        else:
+            val = '-'
         table += f"<td>{val}</td>"
     if ext:
         # If there are more than 4 sessions add the remainder as summary
