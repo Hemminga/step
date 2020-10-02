@@ -11,7 +11,7 @@ delta = (today.weekday() + 4) % 7
 thursday = today - datetime.timedelta(days=delta)
 print('<h3>Uitslag Herfstbridge ' + thursday.strftime('%A %d %B %Y') + ' op Step</h3>')
 base = 'http://admin.stepbridge.nl/show.php?page=tournamentinfo&activityid='
-activityid = '16819'  # Change this
+activityid = '18449'  # Change this
 link = '<a href="'+base+activityid+'" target="_blank">Deze uitslag op de website van Stepbridge</a>'
 print('<p>&nbsp;</p>')
 print('<p>'+link+'</p>')

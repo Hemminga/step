@@ -52,7 +52,12 @@ for row in uitslagen:
     uitslagen[uitslagen.index(row)]['best'] = sum(filter(None, best[:count]))
     if len(data) > 4:
         count = len(row['scores'][4:]) - row['scores'][4:].count(None)
-        average = sum(filter(None, row['scores'][4:])) / count
+        try:
+            average = sum(filter(None, row['scores'][4:])) / count
+            average = f'{average:.2f}'
+        except ZeroDivisionError:
+            count = 0
+            average = '&nbsp;'
         uitslagen[uitslagen.index(row)]['old_average'] = average
         uitslagen[uitslagen.index(row)]['old_count'] = count
 
@@ -60,9 +65,11 @@ rank = 0
 prev_avg = 0
 uitslagen = sorted(uitslagen, key=lambda x: x['best'], reverse=True)
 table = "<table>\n\t<thead>\n\t\t<tr>\n\t\t\t"
-table += "<td>#</td><td>naam</td><td>gem</td><td>#</td>"
+table += "<th>#</th><th>naam</th><th>gem</th><th>#</th>"
 for d in data[:4]:
-    table += f"<td>{d[5:]}</td>"
+    table += f"<th>{d[5:]}</th>"
+if len(data) > 4:
+    table += "<th colspan=\"2\">Eerder</th>"
 table += "\n\t\t</tr>\n\t</thead><tbody>"
 for u in uitslagen:
     rank += 1
